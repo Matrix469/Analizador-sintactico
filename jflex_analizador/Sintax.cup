@@ -1,0 +1,41 @@
+package jflex_analizador;
+
+import java_cup.runtime.*;
+
+parser code {:
+    private Symbol s;
+
+    public void syntax_error(Symbol s) {
+        this.s = s;
+    }
+
+    public Symbol getS() {
+        return this.s;
+    }
+:};
+
+/* Terminales */
+terminal Igual, Metodo, Robot, Punto, Identificador, Numero,Iniciar, ERROR;
+
+/* No terminales */
+non terminal INICIO, EXP;
+
+/* Precedencias */
+precedence left Punto, Igual;
+
+/* Gramática */
+start with INICIO;
+
+INICIO ::= 
+      Robot Identificador EXP
+    | Robot Identificador INICIO
+    | Robot Identificador
+;
+
+EXP ::= 
+      Identificador Punto Metodo Igual Numero EXP
+    | Identificador Punto Metodo Igual Numero
+    | Identificador Punto Metodo Igual Numero INICIO
+    | Identificador Punto Iniciar EXP
+    | Identificador Punto Iniciar
+;
